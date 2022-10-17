@@ -1,0 +1,64 @@
+﻿@model IEnumerable<AirWings.Models.FlightResult>
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<h4 class="text-primary">Search</h4>
+
+<p>
+    <a class="btn btn-warning" style="float:right" asp-action="">Modify Search</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FlightName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Origin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Destination)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Departuretime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Arrivaltime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fare)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FlightName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Origin)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Destination)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Arrivaltime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Departuretime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fare)
+                </td>
+                <td>
+                    <a asp-controller="Booking" asp-action="BookTicket" asp-route-id="@item.TripId" class="btn btn-success">Book</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

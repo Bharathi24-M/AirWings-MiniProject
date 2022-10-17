@@ -1,0 +1,209 @@
+﻿@model AirWings.Models.Bookingdetails
+@{
+    ViewData["Title"] = "BookTicket";
+}
+<div>
+    <h4 class="text-primary">Booking Details <a class="btn btn-warning" style="float:right" asp-controller="Home" asp-action="Index">Modify Search</a></h4>
+
+   
+
+    <hr />
+    <form method="post" asp-controller="Booking" asp-action="ConfirmTicket">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div id="summary">
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.flightResult.FlightName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.flightResult.FlightName)
+
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.flightResult.Origin)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.flightResult.Origin)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.flightResult.Destination)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.flightResult.Destination)
+                </dd>
+
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.flightResult.Departuretime)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.flightResult.Departuretime)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.flightResult.Arrivaltime)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.flightResult.Arrivaltime)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.flightResult.Fare)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.flightResult.Fare)
+                </dd>
+            </dl>
+            <hr />
+            <h4 class="text-primary"> Passenger details</h4>
+            <div class="form-group">
+                <label asp-for="Passengername" class="control-label">Passenger Name</label>
+                <input asp-for="Passengername" class="form-control" />
+                <span asp-validation-for="Passengername" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Passengerpnumber" class="control-label">Contact Number</label>
+                <input asp-for="Passengerpnumber" class="form-control" />
+                <span asp-validation-for="Passengerpnumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Emailaddress" class="control-label">Email Address</label>
+                <input asp-for="Emailaddress" type="email" class="form-control" />
+                <span asp-validation-for="Emailaddress" class="text-danger"></span>
+            </div>
+
+            <hr />
+            <h4 class="text-primary">Offer details</h4>
+            <div class="form-group">
+                @foreach (var offer in Model.offers)
+                {
+                    <dl class="row">
+                        <dt class="col-sm-12">
+                            <input type="radio" id="Off_@offer.Offerid" name="Offerid" value="@offer.Offerid" onclick="SetOffer(@offer.Offerprice)" />
+                            <label for="Off_@offer.Offerid">@offer.Offername - ₹ @offer.Offerprice</label>
+                        </dt>
+                    </dl>
+                }
+                </div>
+                <div>
+                <hr />
+                <h4 class="text-primary">Payment Summary</h4>
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.flightResult.Fare)
+                    </dt>
+                    <dd class="col-sm-10">
+                        <span id="Fare">
+                            @Html.DisplayFor(model => model.flightResult.Fare)
+                        </span>
+                    </dd>
+                </dl>
+
+
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        Discount
+                    </dt>
+                    <dd class="col-sm-10">
+                        <span id="Discount">
+                            0
+                        </span>
+                    </dd>
+
+                </dl>
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        Total Amount
+                    </dt>
+                    <dd class="col-sm-10">
+                        <span id="TotalAmount">
+                            @Html.DisplayFor(model => model.flightResult.Fare)
+                        </span>
+                        <input id="hdnTotalAmount" type="hidden" name="TotalAmount" />
+                    </dd>
+                </dl>
+          
+            </div>
+            <div class="form-group">
+                <input type="button" value="Book ticket" class="btn btn-success btn-lg" onclick="payhidden()" />
+            </div>
+          </div>
+        <div id="paymentsection" style="display:none">
+
+            <h4 class="text-primary">Payment</h4>
+            <div class="form-group">
+                @foreach (var payment in Model.paymentmodes)
+                {
+                    <dl class="row">
+                        <dt class="col-sm-12">
+                            <input type="radio" id="Pay_@payment.Paymodeid" name="Paymodeid" value="@payment.Paymodeid" onclick="tboxview(@payment.Paymodeid)" />
+                            <label for="Pay_@payment.Paymodeid">@payment.Paymode</label>
+                        </dt>
+                    </dl>
+                }
+                <div style="display:none" id="creditcardid">
+                    <label>Card Number</label>
+                    <input type="text">
+                    <label>Date of expiry</label>
+                    <input type="text">
+                    <label>CVV</label>
+                    <input type="text" />
+                </div>
+                <div style="display:none"  id="debitcardid">
+                    <label>Card Number</label>
+                    <input type="text">
+                    <label>Date of expiry</label>
+                    <input type="text">
+                    <label>CVV</label>
+                    <input type="text" />
+                </div>
+                <div style="display:none"  id="Intbankid">
+                    <label for="cars">Select Bank</label>
+                    <select name="bank" id="bankid">
+                        <option value="Axis">Axis Bank</option>
+                        <option value="Abi">SBI</option>
+                        <option value="HDFC">HDFC</option>
+                        <option value="Indian">Indian Bank</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Pay Now" class="btn btn-success btn-lg" />
+            </div>
+        </div>    
+
+
+        <input id="hdnTripId" type="hidden" name="Tripid" value="@Model.flightResult.TripId" />
+        <input id="hdnDiscount" type="hidden" name="Discount" />
+    </form>
+
+</div>
+<script type="text/javascript">
+    function SetOffer(offerprice) {
+        document.getElementById('Discount').innerHTML = offerprice;
+        var fare = document.getElementById('Fare').innerHTML;
+        var Totalamount = fare - offerprice;
+        document.getElementById('TotalAmount').innerHTML = Totalamount;
+        document.getElementById('hdnTotalAmount').value = Totalamount;
+        document.getElementById('hdnDiscount').value = offerprice;
+    }
+    function payhidden() {
+        var x = document.getElementById("summary");
+        var y = document.getElementById("paymentsection");
+        x.style.display = "none";
+        y.style.display = "block";
+    }
+    function tboxview(paymentid) {
+        var div1 = document.getElementById("creditcardid");
+        var div2 = document.getElementById("debitcardid");
+        var div3 = document.getElementById("Intbankid");
+         div1.style.display = "none";
+           div2.style.display = "none";
+            div3.style.display = "none";
+        if(paymentid==1)
+        div1.style.display="block";
+        else if(paymentid==2)
+        div2.style.display="block";
+        else 
+        div3.style.display="block";
+        
+           
+    }
+</script>

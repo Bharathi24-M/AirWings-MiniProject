@@ -1,0 +1,75 @@
+﻿@model AirWings.Models.Ticketdetail
+
+@{
+    ViewData["Title"] = "ConfirmTicket";
+}
+
+<h1>Ticket</h1>
+
+<div>
+    <hr />
+    <dl class="row">   
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Passengername)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Passengername)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Emailaddress)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Emailaddress)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Passengerpnumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Passengerpnumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Discount)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Discount)
+        </dd>
+        @*<dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Taxamount)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Taxamount)
+        </dd>*@
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Netamount)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Netamount)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticketstatus)
+        </dt>
+        <dd class = "col-sm-10">
+            @if (Model.Ticketstatus==0)
+            {
+                <span>Cancelled</span>
+            }
+            else
+            {
+                 <span>Confirmed</span>
+            }
+        </dd>
+        
+        
+    </dl>
+    <div>
+    <div class="form-group">
+                <input type="button" value="Print" onclick="print()" class="btn btn-success" />  
+            @if (Model.Ticketstatus == 1)
+            {
+                       <a asp-action="CancelTicket" asp-controller="Booking" asp-route-id="@Model.Pnr" class="btn btn-danger">Cancel Ticket</a>
+            }
+                
+       </div>
+</div>
+
+</div>

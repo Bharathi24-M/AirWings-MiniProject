@@ -1,0 +1,54 @@
+﻿@model AirWings.Models.FlightSearch
+@{
+    ViewData["Title"] = "Home Page";
+}
+<h4 class="text-primary">Search</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form method="post" asp-action="Search">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label"> Orgin</label>
+                <select asp-for="Origin" id="Orgin" onchange="setDestination()" class="form-control" asp-items="@Model.CityList">
+                    <option value="">Select Orgin</option>
+                </select>
+                <span asp-validation-for="Origin" class="text-danger"> </span>
+            </div>
+            <div class="form-group">
+                <label class="control-label"> Destination</label>
+                <select asp-for="Destination" id="Destination" class="form-control" asp-items="@Model.CityList">
+                    <option value="">Select Destination</option>
+                </select>
+                <span asp-validation-for="Destination" class="text-danger"> </span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Date</label>
+                <input asp-for="TravelDate" type="date" class="form-control" />
+                <span asp-validation-for="TravelDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    function setDestination() {
+        var orgin = document.getElementById("Orgin");
+        var Destination = document.getElementById("Destination");
+
+        for (i = 0; i < Destination.options.length; i++) {
+            Destination.options[i].removeAttribute("hidden");
+        }
+        if (orgin.selectedIndex != 0) {
+            Destination.options[orgin.selectedIndex].setAttribute("hidden", "hidden");
+        }
+    }
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
